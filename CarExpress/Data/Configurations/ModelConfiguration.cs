@@ -15,5 +15,14 @@ public class ModelConfiguration : IEntityTypeConfiguration<Model>
             .WithOne(trim => trim.Model)
             .HasForeignKey(trim => trim.ModelId)
             .IsRequired();
+
+        builder.HasData(
+            new Model { Id = 1, Name = "Miata", BrandId = 1 },
+            new Model { Id = 2, Name = "Liberty", BrandId = 2 },
+            new Model { Id = 3, Name = "Scénic", BrandId = 3 },
+            new Model { Id = 4, Name = "Explorer", BrandId = 4 },
+            new Model { Id = 5, Name = "Civic", BrandId = 5 },
+            new Model { Id = 6, Name = "GTI", BrandId = 6 },
+            new Model { Id = 7, Name = "Edge", BrandId = 4 });
     }
 }

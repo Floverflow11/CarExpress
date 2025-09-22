@@ -15,5 +15,13 @@ public class RepairDataConfiguration : IEntityTypeConfiguration<RepairData>
             .WithOne(repair => repair.RepairData)
             .HasForeignKey(repair => repair.RepairDataId)
             .IsRequired();
+
+        builder.HasData(
+            new RepairData { Id = 1, Name = "Restauration complète" },
+            new RepairData { Id = 2, Name = "Roulements des roues avant" },
+            new RepairData { Id = 3, Name = "Radiateur" },
+            new RepairData { Id = 4, Name = "Freins" },
+            new RepairData { Id = 5, Name = "Pneus" },
+            new RepairData { Id = 6, Name = "Climatisation" });
     }
 }

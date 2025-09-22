@@ -22,5 +22,23 @@ public class CarConfiguration : IEntityTypeConfiguration<Car>
             .WithOne()
             .HasForeignKey(picture => picture.CarId)
             .IsRequired();
+
+        builder.HasData(
+            new Car
+            {
+                Id = 1, Year = 2019, BoughtDate = new DateOnly(2022, 1, 7), BoughtPrice = 1800, RepairCost = 7600,
+                CanBeSoldFromDate = new DateOnly(2022, 4, 7), IsAvailable = true, TrimId = 1
+            },
+            new Car
+            {
+                Id = 2, Year = 2007, BoughtDate = new DateOnly(2022, 4, 2), BoughtPrice = 4500, RepairCost = 350,
+                CanBeSoldFromDate = new DateOnly(2022, 4, 7), IsAvailable = true, TrimId = 2
+            },
+            new Car
+            {
+                Id = 3, Year = 2007, BoughtDate = new DateOnly(2022, 4, 4), BoughtPrice = 1800, RepairCost = 690,
+                CanBeSoldFromDate = new DateOnly(2022, 4, 8), IsAvailable = true, TrimId = 3
+            }
+        );
     }
 }

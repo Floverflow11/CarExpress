@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using CarExpress.Models;
+using CarExpress.Models.Repositories;
 
 namespace CarExpress.Controllers;
 
@@ -8,19 +9,22 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
+    private readonly ICarRepository _carRepository;
+
+    public HomeController(ILogger<HomeController> logger, ICarRepository carRepository)
     {
         _logger = logger;
+        _carRepository = carRepository;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
-    }
+        var cars = await _carRepository.GetCarsAsync();
 
-    public IActionResult Privacy()
-    {
-        return View();
+        var model = cars.Select(car => new CarViewModel(car.Id, car.BoughtPrice + car.RepairCost + 500, car.Year,
+            car.Trim.Model.Brand.Name, car.Trim.Model.Name, car.Trim.Name));
+
+        return View(model);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

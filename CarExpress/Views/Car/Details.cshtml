@@ -1,0 +1,48 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model CarDetailsViewModel
+@inject SignInManager<IdentityUser> SignInManager
+
+@{
+    ViewData["Title"] = $"{Model.Brand} {Model.Model} {Model.Trim}";
+}
+
+<section>
+    <div class="container p-4 mt-5 m-4">
+
+        <a class="text-decoration-none" asp-controller="Home" asp-action="Index"><i class="bi bi-arrow-left me-2"></i>Retour</a>
+
+        <div class="card border-0 p-0 mt-5">
+            <div class="row">
+                <div class="col-md-7">
+                    <img src="~/img/car.png" class="img-fluid rounded-3" alt="Voiture">
+                </div>
+                <div class="col-md-5">
+                    <div class="card-body">
+
+                        @{
+                            if (SignInManager.IsSignedIn(User))
+                            {
+                                <div class="container p-0 mt-0 mb-4">
+                                    <span class="my-2">Vous avez publié cette annonce, vous pouvez le :</span>
+
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item">Modifier</li>
+                                        <li class="list-inline-item">Supprimer</li>
+                                    </ul>
+                                </div>
+                            }
+                        }
+
+                        <h5 class="card-title">@Model.Price</h5>
+                        <ul class="list-inline">
+                            <li>@Model.Year</li>
+                            <li>@Model.Brand</li>
+                            <li>@Model.Model</li>
+                            <li>@Model.Trim</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

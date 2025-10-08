@@ -18,26 +18,28 @@
             }
         </div>
         <div class="container text-start mt-5">
-            <div class="row row-cols-2 justify-content-center">
+            <div class="row row-cols-2">
                 @{
-                    foreach (var view in Model.Concat(Model))
+                    foreach (var view in Model)
                     {
-                        <div class="card border-0 p-0 m-4" style="max-width: 540px;">
-                            <div class="row g-0 align-items-center">
-                                <div class="col-md-7">
-                                    <img src="~/img/car.png" class="img-fluid rounded-3" alt="Voiture">
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="card-body">
-                                        <h5 class="card-title">@view.Price</h5>
-                                        <ul class="list-inline">
-                                            <li>@view.Year</li>
-                                            <li>@view.Brand</li>
-                                            <li>@view.Model</li>
-                                            <li>@view.Trim</li>
-                                        </ul>
-                                        <a asp-controller="Car" asp-action="Details" asp-route-id="@view.Id"
-                                           class="stretched-link"></a>
+                        <div class="col">
+                            <div class="card border-0 p-0 m-4" style="max-width: 540px;">
+                                <div class="row g-0 align-items-center">
+                                    <div class="col-md-7">
+                                        <img src="~/img/car.png" class="img-fluid rounded-3" alt="Voiture">
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="card-body">
+                                            <h5 class="card-title">@view.Price</h5>
+                                            <ul class="list-inline">
+                                                <li>@view.Year</li>
+                                                <li>@view.Brand</li>
+                                                <li>@view.Model</li>
+                                                <li>@view.Trim</li>
+                                            </ul>
+                                            <a asp-controller="Car" asp-action="Details" asp-route-id="@view.Id"
+                                               class="stretched-link"></a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

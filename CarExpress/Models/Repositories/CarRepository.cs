@@ -34,4 +34,10 @@ public class CarRepository : ICarRepository
 
         return cars;
     }
+    
+    public async Task DeleteCarAsync(Car car)
+    {
+        _context.Cars.Remove(car);
+        await _context.SaveChangesAsync();
+    }
 }

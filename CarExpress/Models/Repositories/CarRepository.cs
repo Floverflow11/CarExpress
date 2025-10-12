@@ -16,6 +16,7 @@ public class CarRepository : ICarRepository
     public async Task<Car?> GetCarAsync(int id)
     {
         var car = await _context.Cars
+            .Include(car => car.Pictures)
             .Include(car => car.Trim)
             .ThenInclude(car => car.Model)
             .ThenInclude(car => car.Brand)
@@ -27,6 +28,7 @@ public class CarRepository : ICarRepository
     public async Task<IList<Car>> GetCarsAsync()
     {
         var cars = await _context.Cars
+            .Include(car => car.Pictures)
             .Include(car => car.Trim)
             .ThenInclude(car => car.Model)
             .ThenInclude(car => car.Brand)
@@ -38,6 +40,12 @@ public class CarRepository : ICarRepository
     public async Task DeleteCarAsync(Car car)
     {
         _context.Cars.Remove(car);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task AddCarAsync(Car car)
+    {
+        await _context.Cars.AddAsync(car);
         await _context.SaveChangesAsync();
     }
 }

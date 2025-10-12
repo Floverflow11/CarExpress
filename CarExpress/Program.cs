@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using CarExpress.Data;
 using CarExpress.Models.Repositories;
+using CarExpress.Models.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,9 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddTransient<ICarRepository, CarRepository>();
+builder.Services.AddTransient<ICarCatalogRepository, CarCatalogRepository>();
+builder.Services.AddTransient<ICarPictureRepository, CarPictureRepository>();
+builder.Services.AddScoped<IImageUploadService, ImageUploadService>();
 
 var app = builder.Build();
 

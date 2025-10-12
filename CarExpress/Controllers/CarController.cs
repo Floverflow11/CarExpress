@@ -1,5 +1,7 @@
 ﻿using CarExpress.Models;
+using CarExpress.Models.Entities;
 using CarExpress.Models.Repositories;
+using CarExpress.Models.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,12 +10,20 @@ namespace CarExpress.Controllers;
 public class CarController : Controller
 {
     private readonly ICarRepository _carRepository;
+    private readonly ICarCatalogRepository _carCatalogRepository;
+    private readonly ICarPictureRepository _carPictureRepository;
+    private readonly IImageUploadService _imageUploadService;
 
-    public CarController(ICarRepository carRepository)
+    public CarController(ICarRepository carRepository, ICarCatalogRepository carCatalogRepository,
+        ICarPictureRepository carPictureRepository, IImageUploadService imageUploadService)
     {
         _carRepository = carRepository;
+        _carCatalogRepository = carCatalogRepository;
+        _carPictureRepository = carPictureRepository;
+        _imageUploadService = imageUploadService;
     }
 
+    [HttpGet]
     public async Task<IActionResult> Details(int id)
     {
         var car = await _carRepository.GetCarAsync(id);
@@ -24,14 +34,68 @@ public class CarController : Controller
         }
 
         var model = new CarDetailsViewModel(car.Id, car.BoughtPrice + car.RepairCost + 500, car.Year,
-            car.Trim.Model.Brand.Name, car.Trim.Model.Name, car.Trim.Name);
+            car.Trim.Model.Brand.Name, car.Trim.Model.Name, car.Trim.Name,
+            car.Pictures.Select(pic => new CarPictureViewModel(pic.FileName, pic.FilePath)));
 
         return View(model);
     }
 
+    [HttpGet]
+    [Authorize]
+    public IActionResult Add()
+    {
+        return View();
+    }
+
+    [HttpPost]
     [Authorize]
     [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Add(CarAddViewModel viewModel)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(viewModel);
+        }
+
+        var brand = await _carCatalogRepository.GetOrCreateBrandAsync(viewModel.Brand);
+        var model = await _carCatalogRepository.GetOrCreateModelAsync(viewModel.Model, brand.Id);
+        var trim = await _carCatalogRepository.GetOrCreateTrimAsync(viewModel.Trim, model.Id);
+
+        var car = new Car
+        {
+            Year = viewModel.Year,
+            BoughtDate = DateOnly.FromDateTime(DateTime.Now),
+            BoughtPrice = viewModel.BoughtPrice,
+            RepairCost = viewModel.RepairCost,
+            IsAvailable = true,
+            TrimId = trim.Id
+        };
+
+        await _carRepository.AddCarAsync(car);
+
+        var picture = await _imageUploadService.SaveAsync(viewModel.Image, car.Id);
+
+        await _carPictureRepository.AddAsync(picture);
+
+        TempData["AddedCarId"] = car.Id;
+
+        return RedirectToAction("Added");
+    }
+
+    [HttpGet]
+    public IActionResult Added()
+    {
+        if (TempData["AddedCarId"] == null)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+
+        return View();
+    }
+
     [HttpPost]
+    [Authorize]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(int id)
     {
         var car = await _carRepository.GetCarAsync(id);
@@ -52,6 +116,7 @@ public class CarController : Controller
         return RedirectToAction("Deleted");
     }
 
+    [HttpGet]
     public IActionResult Deleted()
     {
         var id = TempData["DeletedCarId"];

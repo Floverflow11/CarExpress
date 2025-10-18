@@ -27,27 +27,24 @@
                 </div>
                 <div class="col-md-5">
                     <div class="card-body">
-                        @{
-                            if (SignInManager.IsSignedIn(User))
-                            {
-                                <div class="container p-0 mt-0 mb-4">
-                                    <span class="my-2">Vous avez publié cette annonce, vous pouvez le :</span>
-
-                                    <ul class="list-inline">
-                                        <li class="list-inline-item">
-                                            <button class="btn btn-link">Modifier</button>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <form asp-controller="Car" asp-action="Delete" asp-route-id="@Model.Id"
-                                                  method="post">
-                                                <button class="btn btn-link">Supprimer</button>
-                                            </form>
-                                        </li>
-                                    </ul>
-                                </div>
-                            }
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <div class="container p-0 mt-0 mb-4">
+                                <span class="my-0 d-block">Vous avez publié cette annonce, vous pouvez le :</span>
+        
+                                <ul class="list-inline m-0 p-0">
+                                    <li class="list-inline-item ps-0">
+                                        <button class="btn btn-link ps-0 admin-modify">Modifier</button>
+                                    </li>
+                                    <li class="list-inline-item ps-0">
+                                        <form asp-controller="Car" asp-action="Delete" asp-route-id="@Model.Id" method="post">
+                                            <button class="btn btn-link admin-delete">Supprimer</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
                         }
-
+                        
                         <h5 class="card-title">@Model.Price</h5>
                         <ul class="list-inline">
                             <li>@Model.Year</li>

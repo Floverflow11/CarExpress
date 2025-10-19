@@ -134,4 +134,60 @@ public class CarController : Controller
 
         return View(vm);
     }
+
+    [HttpGet]
+    [Authorize]
+    public async Task<IActionResult> Edit(int id)
+    {
+        var car = await _carRepository.GetCarAsync(id);
+
+        if (car == null)
+        {
+            return NotFound();
+        }
+
+        var picture = car.Pictures.FirstOrDefault();
+
+        var vm = new CarEditViewModel(car.Id, car.BoughtPrice, car.RepairCost, car.Year, car.IsAvailable,
+            car.Description, null, picture?.FilePath);
+
+        return View(vm);
+    }
+
+    [HttpPost]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(CarEditViewModel viewModel)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(viewModel);
+        }
+
+        var car = await _carRepository.GetCarAsync(viewModel.Id);
+
+        if (car == null)
+        {
+            return NotFound();
+        }
+
+        car.BoughtPrice = viewModel.BoughtPrice;
+        car.RepairCost = viewModel.RepairCost;
+        car.Year = viewModel.Year;
+        car.IsAvailable = viewModel.IsAvailable;
+        car.Description = string.IsNullOrWhiteSpace(viewModel.Description) ? null : viewModel.Description.Trim();
+        
+        if (viewModel.Image != null)
+        {
+            var picture = await _imageUploadService.SaveAsync(viewModel.Image, car.Id);
+
+            await _carPictureRepository.AddAsync(picture);
+
+            car.Pictures = [picture];
+        }
+
+        await _carRepository.SaveChangesAsync();
+
+        return RedirectToAction("Details", new { id = car.Id });
+    }
 }

@@ -31,20 +31,22 @@
                         {
                             <div class="container p-0 mt-0 mb-4">
                                 <span class="my-0 d-block">Vous avez publié cette annonce, vous pouvez le :</span>
-        
+
                                 <ul class="list-inline m-0 p-0">
                                     <li class="list-inline-item ps-0">
-                                        <button class="btn btn-link ps-0 admin-modify">Modifier</button>
+                                        <a asp-controller="Car" asp-action="Edit" asp-route-id="@Model.Id"
+                                           class="btn btn-link ps-0 admin-modify">Modifier</a>
                                     </li>
                                     <li class="list-inline-item ps-0">
-                                        <form asp-controller="Car" asp-action="Delete" asp-route-id="@Model.Id" method="post">
+                                        <form asp-controller="Car" asp-action="Delete" asp-route-id="@Model.Id"
+                                              method="post">
                                             <button class="btn btn-link admin-delete">Supprimer</button>
                                         </form>
                                     </li>
                                 </ul>
                             </div>
                         }
-                        
+
                         <h5 class="card-title">@Model.Price</h5>
                         <ul class="list-inline">
                             <li>@Model.Year</li>

@@ -1,0 +1,73 @@
+﻿@model CarEditViewModel
+
+@{
+    ViewData["Title"] = "Modification";
+}
+
+<section>
+    <div class="container text-center p-4 mt-5 m-4">
+        <h1 class="display-6">Modifier l'annonce</h1>
+        <p class="text-muted mb-4">les champs marqués d'un * sont obligatoires</p>
+        <div class="container text-start border-1 shadow p-5" style="max-width: 500px;">
+            <form asp-controller="Car" asp-action="Edit" method="post" enctype="multipart/form-data">
+                <div class="mb-4">
+                    <label asp-for="BoughtPrice" class="form-label">Prix d'achat *</label>
+                    <input asp-for="BoughtPrice" class="form-control" type="number"/>
+                    <span asp-validation-for="BoughtPrice" class="text-danger"></span>
+                </div>
+                <div class="mb-4">
+                    <label asp-for="RepairCost" class="form-label">Coût des réparations *</label>
+                    <input asp-for="RepairCost" class="form-control" type="number"/>
+                    <span asp-validation-for="RepairCost" class="text-danger"></span>
+                </div>
+                <div class="mb-4">
+                    <label asp-for="Year" class="form-label">Année *</label>
+                    <input asp-for="Year" class="form-control" type="number"/>
+                    <span asp-validation-for="Year" class="text-danger"></span>
+                </div>
+                <div class="mb-4">
+                    <label asp-for="Description" class="form-label">Description</label>
+                    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="mb-4">
+                    <label asp-for="IsAvailable" class="form-label">Disponible</label>
+                    <div class="form-check">
+                        <input asp-for="IsAvailable" class="form-check-input position-static">
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <p>Visuel</p>
+                    @if (Model.CurrentImagePath != null)
+                    {
+                        <img src="~/@Model.CurrentImagePath" alt="Present" class="img-fluid"/>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Ce véhicule ne possède pas de visuel.</span>
+                    }
+                </div>
+                <div class="mb-4">
+                    <label asp-for="Image" class="form-label">Visuel</label>
+                    <div class="border rounded p-4 text-center" style="min-height: 100px;">
+                        <label for="imageInput" style="display: block;">
+                            <div class="d-inline-flex align-items-center gap-2">
+                                <div class="d-flex align-items-center justify-content-center img-upload">+</div>
+                                <span class="text-secondary">Ajoutez une image</span>
+                            </div>
+                        </label>
+                        <input type="file" asp-for="Image" id="imageInput" class="d-none"/>
+                    </div>
+                    <span asp-validation-for="Image" class="text-danger"></span>
+                </div>
+                <div class="text-center mt-5">
+                    <button type="submit" class="btn btn-primary py-2">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+}

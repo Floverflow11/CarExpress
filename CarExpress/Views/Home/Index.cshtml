@@ -9,11 +9,12 @@
 <section>
     <div class="container text-dark p-4 mt-5">
         <div class="container text-center py-4">
-            <h1 class="display-6">Nos voitures</h1>
+            <h1 class="display-6 txt-scheme-primary">Nos voitures</h1>
             @{
                 if (SignInManager.IsSignedIn(User))
                 {
-                    <a asp-controller="Car" asp-action="Add" class="btn btn-primary my-3 py-3">+ Ajouter une voiture</a>
+                    <a asp-controller="Car" asp-action="Add" class="btn btn-scheme-primary my-3 py-3">+ Ajouter une
+                        voiture</a>
                 }
             }
         </div>
@@ -28,11 +29,13 @@
                                     <div class="col-md-7">
                                         @if (view.Pictures.Any())
                                         {
-                                            <img src="@view.Pictures.First().Path" class="img-fluid rounded-3" alt="Voiture">
+                                            <img src="@view.Pictures.First().Path" class="img-fluid rounded-3"
+                                                 alt="Voiture">
                                         }
                                         else
                                         {
-                                            <img src="~/img/car_placeholder.jpeg" class="img-fluid rounded-3" alt="Voiture">
+                                            <img src="~/img/car_placeholder.jpeg" class="img-fluid rounded-3"
+                                                 alt="Voiture">
                                         }
                                     </div>
                                     <div class="col-md-5">

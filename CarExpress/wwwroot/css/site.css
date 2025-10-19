@@ -38,18 +38,32 @@ body {
     color: #D70000;
 }
 
-.img-upload{
-    width: 50px; 
-    height: 50px; 
-    font-size: 2rem; 
+.img-upload {
+    width: 50px;
+    height: 50px;
+    font-size: 2rem;
     color: #D9A963;
     background: #F2E3CE;
     border: 1px solid #D9A963;
     border-radius: 10px;
 }
 
-.img-upload:hover{
+.img-upload:hover {
     color: #F2E3CE;
     background: #B99055;
     border: 1px solid #D9A963;
+}
+
+.btn-scheme-primary {
+    background: #D9A963;
+    color: #2C1810;
+}
+
+.btn-scheme-primary:hover {
+    background: #B99055;
+    color: white;
+}
+
+.txt-scheme-primary {
+    color: #796157;
 }

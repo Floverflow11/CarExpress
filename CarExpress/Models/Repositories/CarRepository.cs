@@ -25,7 +25,7 @@ public class CarRepository : ICarRepository
         return car;
     }
 
-    public async Task<IList<Car>> GetCarsAsync()
+    public async Task<List<Car>> GetCarsAsync()
     {
         var cars = await _context.Cars
             .Include(car => car.Pictures)
@@ -35,6 +35,27 @@ public class CarRepository : ICarRepository
             .ToListAsync();
 
         return cars;
+    }
+
+    public async Task<List<Car>> GetVisitorCarsAsync()
+    {
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+
+        var cars = await _context.Cars.Where(car => !car.IsSold && car.IsAvailable && car.CanBeSoldFromDate <= today)
+            .Include(car => car.Pictures)
+            .Include(car => car.Trim)
+            .ThenInclude(car => car.Model)
+            .ThenInclude(car => car.Brand)
+            .ToListAsync();
+
+        return cars;
+    }
+
+    public bool CanBeSeenByVisitors(Car car)
+    {
+        var date = DateOnly.FromDateTime(DateTime.UtcNow);
+        
+        return car is { IsSold: false, IsAvailable: true } && car.CanBeSoldFromDate <= date;
     }
 
     public async Task DeleteCarAsync(Car car)

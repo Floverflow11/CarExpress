@@ -33,6 +33,11 @@ public class CarController : Controller
             return NotFound();
         }
 
+        if (User.Identity?.IsAuthenticated != true && !_carRepository.CanBeSeenByVisitors(car))
+        {
+            return NotFound();
+        }
+
         var model = new CarDetailsViewModel(car.Id, car.BoughtPrice + car.RepairCost + 500, car.Year,
             car.Trim.Model.Brand.Name, car.Trim.Model.Name, car.Trim.Name,
             car.Pictures.Select(pic => new CarPictureViewModel(pic.FileName, pic.FilePath)));

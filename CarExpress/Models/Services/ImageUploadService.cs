@@ -6,7 +6,7 @@ public class ImageUploadService : IImageUploadService
 {
     private readonly IWebHostEnvironment _webHostEnvironment;
 
-    private const string AcceptedExtension = ".jpeg";
+    private readonly string[] _acceptedExtensions = [".jpeg", ".jpg", ".png"];
 
     public ImageUploadService(IWebHostEnvironment webHostEnvironment)
     {
@@ -17,9 +17,9 @@ public class ImageUploadService : IImageUploadService
     {
         var extension = Path.GetExtension(image.FileName);
 
-        if (!string.Equals(extension, AcceptedExtension, StringComparison.InvariantCultureIgnoreCase))
+        if (!_acceptedExtensions.Contains(extension.ToLowerInvariant()))
         {
-            throw new InvalidOperationException($"Extension doesn't match {nameof(AcceptedExtension)}");
+            throw new NotSupportedException("File extension is not supported.");
         }
 
         var imageFolder = Path.Combine(_webHostEnvironment.WebRootPath, "img", "cars");

@@ -62,6 +62,33 @@ public class CarController : Controller
             return View(viewModel);
         }
 
+        var brands = await _carCatalogRepository.GetBrandsAsync();
+        var models = await _carCatalogRepository.GetModelsAsync();
+        var trims = await _carCatalogRepository.GetTrimsAsync();
+
+        if (models.Any(m => string.Equals(m.Name, viewModel.Brand, StringComparison.OrdinalIgnoreCase)) ||
+            trims.Any(t => string.Equals(t.Name, viewModel.Brand, StringComparison.OrdinalIgnoreCase)))
+        {
+            ModelState.AddModelError(nameof(viewModel.Brand), "Marque invalide.");
+        }
+        
+        if (brands.Any(b => string.Equals(b.Name, viewModel.Model, StringComparison.OrdinalIgnoreCase)) ||
+            trims.Any(t => string.Equals(t.Name, viewModel.Model, StringComparison.OrdinalIgnoreCase)))
+        {
+            ModelState.AddModelError(nameof(viewModel.Model), "Modèle invalide.");
+        }
+        
+        if (brands.Any(b => string.Equals(b.Name, viewModel.Trim, StringComparison.OrdinalIgnoreCase)) ||
+            models.Any(m => string.Equals(m.Name, viewModel.Trim, StringComparison.OrdinalIgnoreCase)))
+        {
+            ModelState.AddModelError(nameof(viewModel.Trim), "Finition invalide.");
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return View(viewModel);
+        }
+
         var brand = await _carCatalogRepository.GetOrCreateBrandAsync(viewModel.Brand);
         var model = await _carCatalogRepository.GetOrCreateModelAsync(viewModel.Model, brand.Id);
         var trim = await _carCatalogRepository.GetOrCreateTrimAsync(viewModel.Trim, model.Id);
@@ -181,7 +208,7 @@ public class CarController : Controller
         car.Year = viewModel.Year;
         car.IsAvailable = viewModel.IsAvailable;
         car.Description = string.IsNullOrWhiteSpace(viewModel.Description) ? null : viewModel.Description.Trim();
-        
+
         if (viewModel.Image != null)
         {
             var picture = await _imageUploadService.SaveAsync(viewModel.Image, car.Id);

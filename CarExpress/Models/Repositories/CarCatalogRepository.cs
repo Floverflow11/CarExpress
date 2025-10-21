@@ -58,6 +58,21 @@ public class CarCatalogRepository : ICarCatalogRepository
         return trim;
     }
 
+    public async Task<List<Brand>> GetBrandsAsync()
+    {
+        return await _context.Brands.ToListAsync();
+    }
+    
+    public async Task<List<Model>> GetModelsAsync()
+    {
+        return await _context.Models.ToListAsync();
+    }
+    
+    public async Task<List<Trim>> GetTrimsAsync()
+    {
+        return await _context.Trims.ToListAsync();
+    }
+
     private async Task AddBrandAsync(Brand brand)
     {
         _context.Brands.Add(brand);

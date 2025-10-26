@@ -30,12 +30,12 @@
                                         @if (view.Pictures.Any())
                                         {
                                             <img src="@view.Pictures.First().Path" class="img-fluid rounded-3"
-                                                 alt="Voiture">
+                                                 alt="@view.Year @view.Brand @view.Model @view.Trim">
                                         }
                                         else
                                         {
                                             <img src="~/img/car_placeholder.jpeg" class="img-fluid rounded-3"
-                                                 alt="Voiture">
+                                                 alt="Image non disponible pour @view.Year @view.Brand @view.Model @view.Trim">
                                         }
                                     </div>
                                     <div class="col-md-5">

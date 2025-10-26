@@ -3,13 +3,14 @@
 @inject SignInManager<IdentityUser> SignInManager
 
 @{
-    ViewData["Title"] = $"{Model.Brand} {Model.Model} {Model.Trim}";
+    ViewData["Title"] = $"{Model.Year} {Model.Brand} {Model.Model} {Model.Trim}";
 }
 
 <section>
     <div class="container p-4 mt-5 m-4">
 
-        <a class="text-decoration-none txt-scheme-primary" asp-controller="Home" asp-action="Index"><i class="bi bi-arrow-left me-2"></i>Retour</a>
+        <a class="text-decoration-none txt-scheme-primary" asp-controller="Home" asp-action="Index"><i
+                class="bi bi-arrow-left me-2"></i>Retour</a>
 
         <div class="card border-0 p-0 mt-5">
             <div class="row">
@@ -17,12 +18,12 @@
                     @if (Model.Pictures.Any())
                     {
                         <img src="~/@Model.Pictures.First().Path" class="img-fluid rounded-3"
-                             alt="Voiture">
+                             alt="@Model.Year @Model.Brand @Model.Model @Model.Trim">
                     }
                     else
                     {
                         <img src="~/img/car_placeholder.jpeg" class="img-fluid rounded-3"
-                             alt="Voiture">
+                             alt="Image non disponible pour @Model.Year @Model.Brand @Model.Model @Model.Trim">
                     }
                 </div>
                 <div class="col-md-5">
@@ -35,12 +36,16 @@
                                 <ul class="list-inline m-0 p-0">
                                     <li class="list-inline-item ps-0">
                                         <a asp-controller="Car" asp-action="Edit" asp-route-id="@Model.Id"
-                                           class="btn btn-link ps-0 admin-modify">Modifier</a>
+                                           class="btn btn-link ps-0 admin-modify"
+                                           aria-label="Modifier @Model.Year @Model.Brand @Model.Model @Model.Trim">Modifier</a>
                                     </li>
                                     <li class="list-inline-item ps-0">
                                         <form asp-controller="Car" asp-action="Delete" asp-route-id="@Model.Id"
                                               method="post">
-                                            <button class="btn btn-link admin-delete">Supprimer</button>
+                                            <button class="btn btn-link admin-delete"
+                                                    aria-label="Supprimer @Model.Year @Model.Brand @Model.Model @Model.Trim">
+                                                Supprimer
+                                            </button>
                                         </form>
                                     </li>
                                 </ul>
